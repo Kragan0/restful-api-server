@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "users")
 public class MyUser {
 
     @Id
@@ -14,13 +16,13 @@ public class MyUser {
     private Long id;
     
     
-    @Column(name="Name", nullable = false, length=100)
+    @Column(nullable = false, length=100)
     private String name;
     
-    @Column(name="Email", nullable= false, unique=true, length = 100)
+    @Column(nullable= false, unique=true, length = 100)
     private String email;
 
-    @Column(name="PhoneNumber", nullable= false, length = 15)
+    @Column(nullable= false, length = 15)
     private String phoneNumber;
 
     
@@ -36,20 +38,20 @@ public class MyUser {
         // Add your validation logic here (e.g., email and phone number format
         // validation)
         
-        if (this.name.equals(null) || this.name.equals(""))
+        if (this.name == null || this.name.trim().isEmpty())
         {
             return false;
         }
 
         // Regex na email
         String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"; 
-        if (this.email == null || !this.email.matches(emailPattern))
+        if (!this.email.matches(emailPattern))
         {
             return false;
         }        
         // Regex na tel. čislo
         String phoneNumberPattern = "^(\\+?[1-9]\\d{1,14}|0\\d{9,14})$";
-        if (this.phoneNumber == null || !this.phoneNumber.matches(phoneNumberPattern))
+        if (!this.phoneNumber.matches(phoneNumberPattern))
         {
             return false;
         }
@@ -61,7 +63,9 @@ public class MyUser {
     public Long getId() {
         return id;
     }
-
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
@@ -72,6 +76,9 @@ public class MyUser {
 
     public String getEmail() {
         return email;
+    }
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public String getPhoneNumber() {

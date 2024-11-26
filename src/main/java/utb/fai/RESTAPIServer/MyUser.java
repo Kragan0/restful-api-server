@@ -46,8 +46,7 @@ public class MyUser {
         if (this.email == null || !this.email.matches(emailPattern))
         {
             return false;
-        }
-                
+        }        
         // Regex na tel. čislo
         String phoneNumberPattern = "^(\\+?[1-9]\\d{1,14}|0\\d{9,14})$";
         if (this.phoneNumber == null || !this.phoneNumber.matches(phoneNumberPattern))

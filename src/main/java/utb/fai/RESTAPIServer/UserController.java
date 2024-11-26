@@ -17,19 +17,27 @@ public class UserController {
 
     @GetMapping("/users")
     public List<MyUser> getAllUsers() {
-        // TODO: implement logic of /users endpoint
-        return 
+        return userRepository.findAll();
     }
 
     @GetMapping("/getUser")
     public ResponseEntity<MyUser> getUserById(@RequestParam Long id) {
-        // TODO: implement logic of /getUser endpoint
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        
+        MyUser user = userRepository.findById(id).orElse(null);
+        if (user != null)
+        {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/createUser")
     public ResponseEntity<MyUser> createUser(@RequestBody MyUser newUser) {
-        // TODO: implement logic of /createUser endpoint
+        
+        if (newUser.isUserDataValid()) {
+            userRepository.save(newUser);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

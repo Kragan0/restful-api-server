@@ -56,15 +56,34 @@ public class UserController {
     }
     
     @PutMapping("/editUser")
-    public ResponseEntity<MyUser> editUser(@RequestParam(name = "id") Long id) {
-        
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<MyUser> editUser(@RequestParam(name = "id") Long id, @RequestBody MyUser updateUserInformation) {
+        MyUser user = userRepository.findById(id).orElse(null);
+        if (user == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (!updateUserInformation.isUserDataValid())
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);    
+        }
+        user.setName(updateUserInformation.getName());
+        user.setEmail(updateUserInformation.getEmail());
+        user.setPhoneNumber(updateUserInformation.getPhoneNumber());
+
+        MyUser updatedUser = userRepository.save(user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+
     }
     
     @DeleteMapping("/deleteUser")
     public ResponseEntity<MyUser> deleteUser(@RequestParam(name = "id") Long id) {
-        
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+        MyUser user = userRepository.findById(id).orElse(null);
+        if (user == null)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+        }
+        userRepository.delete(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     
     @DeleteMapping("/deleteAll")
